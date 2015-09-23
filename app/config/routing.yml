@@ -1,3 +1,7 @@
+robot_parser:
+    resource: "@RobotParserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 app:
     resource: "@AppBundle/Controller/"
     type:     annotation
