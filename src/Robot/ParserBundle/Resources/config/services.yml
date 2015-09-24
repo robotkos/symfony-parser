@@ -2,3 +2,11 @@ services:
 #    robot_parser.example:
 #        class: Robot\ParserBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+   robot.parser.admin.category:
+       class: Robot\ParserBundle\Admin\CategoryAdmin
+       tags:
+           - { name: sonata.admin, manager_type: orm, group: Parsers, label: "Bilstein" }
+       arguments:
+           - ~
+           - Robot\ParserBundle\Entity\ParserBilstein
+           - 'RobotParserBundle:CategoryAdmin'
