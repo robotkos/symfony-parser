@@ -1,3 +1,7 @@
 robot_parser_homepage:
     path:     /hello/{name}
     defaults: { _controller: RobotParserBundle:Default:index }
+
+index:
+    path:     /index
+    defaults: { _controller: RobotParserBundle:CategoryAdminController:index }
