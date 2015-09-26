@@ -1,10 +1,6 @@
 robot_parser:
     resource: "@RobotParserBundle/Resources/config/routing.yml"
     prefix:   /
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
 # FOSUserBundle's routing
 fos_user_security:
   resource: "@FOSUserBundle/Resources/config/routing/security.xml"
