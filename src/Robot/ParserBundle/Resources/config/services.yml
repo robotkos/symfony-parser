@@ -1,4 +1,5 @@
 services:
+
     blogger.symblog.admin.sites:
         class: Robot\ParserBundle\Admin\ParsersAdmin
         tags:
