@@ -1,4 +1,9 @@
 services:
-#    robot_parser.example:
-#        class: Robot\ParserBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    blogger.symblog.admin.sites:
+        class: Robot\ParserBundle\Admin\ParsersAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Parser, label: Parser }
+        arguments:
+            - null
+            - Robot\ParserBundle\Entity\ParserBilstein
+            - RobotParserBundle:ParsersAdmin
