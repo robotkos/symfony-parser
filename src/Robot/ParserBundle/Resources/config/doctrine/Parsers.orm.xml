@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Robot\ParserBundle\Entity\Parsers" table="parsers">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="250" nullable="false"/>
+    <field name="parts" type="text" column="parts" nullable="false"/>
+    <field name="status" type="boolean" column="status" nullable="false"/>
+    <field name="dateStart" type="datetime" column="date_start" nullable="false"/>
+  </entity>
+</doctrine-mapping>

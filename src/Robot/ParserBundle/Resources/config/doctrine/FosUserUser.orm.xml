@@ -29,7 +29,7 @@
     <field name="dateOfBirth" type="datetime" column="date_of_birth" nullable="true"/>
     <field name="firstname" type="string" column="firstname" length="64" nullable="true"/>
     <field name="lastname" type="string" column="lastname" length="64" nullable="true"/>
-    <field name="website" type="string" column="website" length="64" nullable="true"/>
+    <field name="website" type="string" column="website" length="1000" nullable="true"/>
     <field name="biography" type="string" column="biography" length="1000" nullable="true"/>
     <field name="gender" type="string" column="gender" length="1" nullable="true"/>
     <field name="locale" type="string" column="locale" length="8" nullable="true"/>
@@ -46,6 +46,12 @@
     <field name="gplusData" type="json" column="gplus_data" nullable="true"/>
     <field name="token" type="string" column="token" length="255" nullable="true"/>
     <field name="twoStepCode" type="string" column="two_step_code" length="255" nullable="true"/>
+    <field name="returned" type="integer" column="returned" nullable="false"/>
+    <field name="counts" type="integer" column="counts" nullable="false"/>
+    <field name="countAll" type="integer" column="count_all" nullable="false"/>
+    <field name="paid" type="boolean" column="paid" nullable="true"/>
+    <field name="galleryId" type="integer" column="gallery_id" nullable="false"/>
+    <field name="tbname" type="string" column="tbname" length="50" nullable="false"/>
     <many-to-many field="group" target-entity="FosUserGroup" inversed-by="user">
       <join-table name="fos_user_user_group">
         <join-columns>

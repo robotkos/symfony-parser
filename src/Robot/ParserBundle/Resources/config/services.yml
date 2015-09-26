@@ -1,10 +1,21 @@
 services:
 
-    blogger.symblog.admin.sites:
+    blogger.symblog.admin.parsers:
         class: Robot\ParserBundle\Admin\ParsersAdmin
         tags:
             - { name: sonata.admin, manager_type: orm, group: Parser, label: Parser }
         arguments:
             - null
-            - Robot\ParserBundle\Entity\ParserBilstein
+            - Robot\ParserBundle\Entity\Parsers
             - RobotParserBundle:ParsersAdmin
+    blogger.symblog.admin.items:
+        class: Robot\ParserBundle\Admin\ItemsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: Items, label: Items }
+        arguments:
+            - null
+            - Robot\ParserBundle\Entity\Items
+            - RobotParserBundle:ItemsAdmin
+    parsers.service:
+        class: Robot\ParserBundle\Model\Parsers
+        arguments: [ @doctrine.orm.entity_manager ]

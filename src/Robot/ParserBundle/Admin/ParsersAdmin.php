@@ -18,23 +18,31 @@ class ParsersAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('id', null, array('label' => 'Id'))
-                   ->add('pn', null, array('label' => 'pn'))
-                   ->add('oldPn', null, array('label' => 'oldPn'))
-                   ->add('descr', null, array('label' => 'descr'))
-                   ->add('img', null, array('label' => 'img'));
+                   ->add('name', null, array('label' => 'Name'))
+                   ->add('status', 'boolean', array('editable' => true))
+                   ->add('dateStart', null, array('label' => 'Date Start'))
+                    ->add('_action', 'actions', array(
+                      'label' => 'Action',
+                      'actions' => array(
+                          'Import' => array(
+                              'template' => 'RobotParserBundle:Parsers:list__action_import.html.twig',
+                              'show' => array(),
+                          )
+                      )
+                  ));
     }
  
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('pn')
-                   ->add('oldPn')
-                   ->add('descr')
-                   ->add('img');
+        $formMapper->add('name')
+                   ->add('parts')
+                   ->add('status')
+                   ->add('dateStart');
     }
 
   protected function configureRoutes(RouteCollection $collection)
   {
-      #$collection->add('parsers', $this->getRouterIdParameter().'/parsers');
+      $collection->add('import', $this->getRouterIdParameter().'/import');
   }
 
 
