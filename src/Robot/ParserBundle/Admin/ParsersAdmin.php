@@ -21,8 +21,17 @@ class ParsersAdmin extends Admin
                    ->add('name', null, array('label' => 'Name'))
                    ->add('status', 'boolean', array('editable' => true))
                    ->add('dateStart', null, array('label' => 'Date Start'))
+                   ->add('_actionimg', 'actions', array(
+                        'label' => 'Image Action',
+                        'actions' => array(
+                            'Importimg' => array(
+                                'template' => 'RobotParserBundle:Parsers:list__action_import_image.html.twig',
+                                'show' => array(),
+                            )
+                        )
+                   ))
                     ->add('_action', 'actions', array(
-                      'label' => 'Action',
+                      'label' => 'Data Action',
                       'actions' => array(
                           'Import' => array(
                               'template' => 'RobotParserBundle:Parsers:list__action_import.html.twig',
@@ -43,6 +52,7 @@ class ParsersAdmin extends Admin
   protected function configureRoutes(RouteCollection $collection)
   {
       $collection->add('import', $this->getRouterIdParameter().'/import');
+      $collection->add('importimg', $this->getRouterIdParameter().'/importimg');
   }
 
 

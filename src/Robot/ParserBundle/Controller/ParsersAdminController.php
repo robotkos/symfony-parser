@@ -13,6 +13,28 @@ class ParsersAdminController extends Controller
 	private $ParsersModel;
 	private $id;
 
+	public function ImportimgAction(Request $request) {
+		$this->request = $request;
+		$this->id = $this->request->get($this->admin->getIdParameter());
+		$this->ParsersModel = $this->get('parsers.service');
+		$this->ParsersModel->UpdateParser($this->id);
+		$parts = array();
+		$parts = $this->ParsersModel->GetParts($this->id);
+		if(!empty($parts['parts'])){
+			$parts = $parts['parts'];
+		}
+		$items = explode(",", $parts);
+
+		$array_data = $this->ParsersModel->DeleteItems($this->id);
+
+		$array_data = array();
+		switch ($this->id) {
+			case 1:
+				$this->Bilsteinus_imgs($items);
+				break;
+		}
+		return new RedirectResponse($this->admin->generateUrl('list'));
+	}
 	public function ImportAction(Request $request) {
 		$this->request = $request;
 		$this->id = $this->request->get($this->admin->getIdParameter());
@@ -150,15 +172,16 @@ class ParsersAdminController extends Controller
 		  else
 			{
 				$array_data[$item]['ext_rebound'] = "Null"  ;
-			}	
+			}
 
+		//Descript
 		  $pos      = strpos($content, '<div style="clear: both"></div>');
-		  $pos1     = strpos($content, '<br /><br />
-		<div class="noprint">');
+		  $pos1     = strpos($content, '<div class="noprint">');
 		  $descrip   = substr($content, $pos, $pos1 - $pos);
-		  $descrip      = str_replace('<div style="clear: both"></div>
-		<p>', "", $descrip);
-		  $descrip      = str_replace('<br /><br />', "", $descrip);
+		  $descrip      = str_replace('<div style="clear: both"></div>', "", $descrip);
+			$descrip      = str_replace('<p>', "", $descrip);
+		  $descrip      = str_replace('<div class="noprint">', "", $descrip);
+			$descrip      = str_replace('<br /><br />', "", $descrip);
 		  $descrip       = trim(str_replace('<div style="clear: both"></div><p>', "", $descrip));
 		  $descrip      = trim(str_replace('<br /><br /><div class="noprint">', "", $descrip));
 		  $array_data[$item]['descrip'] = $descrip  ;
@@ -168,7 +191,39 @@ class ParsersAdminController extends Controller
 		}
 		return $array_data;
 	}
- 
+
+	private function Bilsteinus_imgs($items){
+
+		$active = $this->ParsersModel->GetActiveStatus($this->id);
+		if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
+
+		$ftp_server="robotk00.ftp.ukraine.com.ua";
+		$ftp_user_name="robotk00_test";
+		$ftp_user_pass="ilmpvma1";
+
+		$array_data = array();
+		foreach ($items as $key => $item) {
+
+			$file = "http://cart.bilsteinus.com/images/products/".$item."_1.jpg";
+
+			$remote_file  = $item."_1.jpg";
+			// set up basic connection
+			$conn_id = ftp_connect($ftp_server);
+
+			// login with username and password
+			$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+
+			// upload a file
+			ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
+			// close the connection
+
+		}
+
+		ftp_close($conn_id);
+		die();
+
+	}
+
 	private function array2csv(array &$array, $titles) {
 	 if (count($array) == 0) {
 	 return null;

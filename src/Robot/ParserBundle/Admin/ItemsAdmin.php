@@ -20,6 +20,7 @@ class ItemsAdmin extends Admin
         $listMapper->addIdentifier('id', null, array('label' => 'Id'))
                    ->add('pn', null, array('label' => 'pn'))
                    ->add('oldPn', null, array('label' => 'oldPn'))
+                   ->add('descr', null, array('label' => 'descr'))
                    ->add('img', null, array('label' => 'img'));
     }
  
