@@ -24,8 +24,8 @@ class ParsersAdmin extends Admin
                    ->add('_actionimg', 'actions', array(
                         'label' => 'Image Action',
                         'actions' => array(
-                            'Importimg' => array(
-                                'template' => 'RobotParserBundle:Parsers:list__action_import_image.html.twig',
+                            'Import' => array(
+                                'template' => 'RobotParserBundle:Parsers:list__actionimg_import.html.twig',
                                 'show' => array(),
                             )
                         )
@@ -51,8 +51,8 @@ class ParsersAdmin extends Admin
 
   protected function configureRoutes(RouteCollection $collection)
   {
-      $collection->add('import', $this->getRouterIdParameter().'/import');
       $collection->add('importimg', $this->getRouterIdParameter().'/importimg');
+      $collection->add('import', $this->getRouterIdParameter().'/import');
   }
 
 

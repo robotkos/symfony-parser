@@ -33,12 +33,14 @@ class Parsers
 
     public function AddItems($data,$parser_id){ 
 
-		$sql = "INSERT INTO `items` (`parser_id`,`pn`, `old_pn`, `descr`,`img`) VALUES (:parser_id, :number, :old_number, :descrip,:img)";
+		$sql = "INSERT INTO `items` (`parser_id`,`pn`, `old_pn`, `descr`,`includes`,`notes`,`img`) VALUES (:parser_id, :number, :old_number, :descrip, :includes, :notes,:img)";
 		$query = $this->_em->getConnection()->prepare($sql);
 		$query->bindValue('parser_id', $parser_id);
 		$query->bindValue('number', $data['number']);
 		$query->bindValue('old_number', $data['old_number']);
 		$query->bindValue('descrip',$data['descrip']);
+        $query->bindValue('includes',$data['includes']);
+        $query->bindValue('notes',$data['notes']);
 		$query->bindValue('img', '');
 		$query->execute();
         return true;

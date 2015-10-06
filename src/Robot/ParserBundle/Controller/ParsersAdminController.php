@@ -33,6 +33,7 @@ class ParsersAdminController extends Controller
 				$this->Bilsteinus_imgs($items);
 				break;
 		}
+
 		return new RedirectResponse($this->admin->generateUrl('list'));
 	}
 	public function ImportAction(Request $request) {
@@ -53,7 +54,10 @@ class ParsersAdminController extends Controller
 		switch ($this->id) {
 			case 1:
 				$this->Bilsteinus($items);
-				break;			
+				break;
+			case 2:
+				$this->Rockkrawler($items);
+				break;
 		}
 
 		return new RedirectResponse($this->admin->generateUrl('list'));
@@ -186,12 +190,15 @@ class ParsersAdminController extends Controller
 		  $descrip      = trim(str_replace('<br /><br /><div class="noprint">', "", $descrip));
 		  $array_data[$item]['descrip'] = $descrip  ;
 
+			$array_data[$item]['includes'] = "Null"  ;
+			$array_data[$item]['notes'] = "Null"  ;
+
 		  $this->InsertDB($array_data[$item]);
 
 		}
 		return $array_data;
 	}
-
+// Bilstein Image Parser
 	private function Bilsteinus_imgs($items){
 
 		$active = $this->ParsersModel->GetActiveStatus($this->id);
@@ -220,8 +227,123 @@ class ParsersAdminController extends Controller
 		}
 
 		ftp_close($conn_id);
-		die();
 
+	}
+
+	private function Rockkrawler($items){
+		foreach ($items as $key => $item) {
+			$old_number = "";
+			$content = "";
+			$active = $this->ParsersModel->GetActiveStatus($this->id);
+			if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
+
+			$content = $this->fileGetContentz("http://www.rockkrawler.com/ProductDetails.asp?ProductCode=".$item);
+
+			//Part#
+			$pos      = strpos($content, '<span class="product_code">');
+			if($pos)
+			{
+				$part_number   = substr($content, $pos, 50);
+				$pos2      = strpos($part_number, '<span class="product_code">');
+				$pos3     = strpos($part_number, '</span');
+				$part_number   = substr($content, $pos, $pos3 - $pos2);
+				$part_number      = str_replace('<span class="product_code">', "", $part_number);
+				$part_number      = str_replace('</span', "", $part_number);
+				$part_number      = trim(str_replace('<span class="product_code">', "", $part_number));
+				$part_number      = trim(str_replace('</span', "", $part_number));
+				$array_data[$item]['number'] = $part_number ;
+
+				//Includes#
+				$pos      = strpos($content, 'Includes:');
+				if($pos)
+				{
+					$pos1     = strpos($content, '<br /><br /><br />');
+					if($pos1)
+					{
+						$includes   = substr($content, $pos, $pos1 - $pos);
+						$includes      = str_replace('Includes:', "", $includes);
+						$includes      = str_replace('<div style="height: 15px;">', "", $includes);
+						$includes      = str_replace('<br />', " / ", $includes);
+						$includes      = str_replace('/ </span>', "", $includes);
+						$includes      = str_replace('  ', " ", $includes);
+						//$includes      = str_replace('</span>', "", $includes);
+						$includes      = trim(str_replace('Includes:', "", $includes));
+						$includes      = trim(str_replace('<div style="height: 15px;">', "", $includes));
+						$includes      = trim(str_replace('<br />', "", $includes));
+						$includes      = trim(str_replace('/ </span>', "", $includes));
+						$includes      = trim($includes);
+						//$includes      = trim(str_replace('</span>', "", $includes));
+						//$part_number      = trim(str_replace('<br />', "", $part_number));
+
+					}
+					else
+					{
+						$pos1     = strpos($content, '<div style="height: 15px;">');
+						$includes   = substr($content, $pos, $pos1 - $pos);
+						$includes      = str_replace('Includes:</span><br />', "", $includes);
+						$includes      = str_replace('<div style="height: 15px;">', "", $includes);
+						$includes      = str_replace('<br />', " / ", $includes);
+						$includes      = str_replace('/ </span>', " / ", $includes);
+						$includes      = str_replace('/ </span>', "", $includes);
+						$includes      = str_replace('  ', " ", $includes);
+						//$includes      = str_replace('</span>', "", $includes);
+						$includes      = trim(str_replace('Includes:', "", $includes));
+						$includes      = trim(str_replace('<div style="height: 15px;">', "", $includes));
+						$includes      = trim(str_replace('<br />', "", $includes));
+						$includes      = trim(str_replace('<div style="height: 15px;">', "", $includes));
+						$includes      = trim(str_replace('/ </span>', "", $includes));
+						$includes      = trim(str_replace('/ </span>', "", $includes));
+						$includes      = trim($includes);
+						//$includes      = trim(str_replace('</span>', "", $includes));
+					}
+					$array_data[$item]['includes'] = $includes ;
+				}
+				else{
+					$array_data[$item]['includes'] = "Null" ;
+				}
+
+
+
+				//Notes#
+				$pos      = strpos($content, '<b>NOTES!</b><br />');
+				if($pos) {
+					$pos1     = strpos($content, 'Share your knowledge of this product');
+					$notes   = substr($content, $pos, $pos1 - $pos);
+					$pos2      = strpos($notes, '<b>NOTES!</b><br />');
+					$pos3     = strpos($notes, '<td width="1" background');
+					$notes   = substr($notes, 0, $pos3);
+					/*$pos4      = strpos($notes, '<b>NOTES!</b><br />');
+                    $pos5     = strpos($notes, '</table>');
+                    $notes   = substr($notes, $pos, $pos5 - $pos4);*/
+					$notes      = str_replace('<b>NOTES!</b><br />', "", $notes);
+					$notes      = str_replace('</table>', "", $notes);
+					$notes      = str_replace('</tr>', "", $notes);
+					$notes      = str_replace('</td>', "", $notes);
+					$notes      = str_replace('<br />', " / ", $notes);
+					$notes      = trim(str_replace('<br />', "", $notes));
+					$notes      = trim(str_replace('</td>', "", $notes));
+					$notes      = trim(str_replace('</table>', "", $notes));
+					$notes      = trim(str_replace('</tr>', "", $notes));
+					$array_data[$item]['notes'] = $notes ;
+				}
+
+				else
+				{
+					$array_data[$item]['notes'] = "Null" ;
+				}
+				$array_data[$item]['old_number'] = "Null"  ;
+				$array_data[$item]['descrip'] = "Null"  ;
+				print_r($array_data);
+				die();
+				$this->InsertDB($array_data[$item]);
+			}
+			else
+			{
+				$array_data[$item]['number'] = "Null" ;
+			}
+
+		}
+		return $array_data;
 	}
 
 	private function array2csv(array &$array, $titles) {
@@ -239,7 +361,9 @@ class ParsersAdminController extends Controller
 
 
 	private function InsertDB($data){
-		if(!empty($data['number']) && !empty($data['old_number']) && !empty($data['descrip']) ){
+
+		if(!empty($data['number']) && !empty($data['old_number']) ){
+
 			$this->ParsersModel->AddItems($data,$this->id);
 		}
 	}
