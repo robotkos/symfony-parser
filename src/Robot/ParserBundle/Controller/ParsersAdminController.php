@@ -58,6 +58,9 @@ class ParsersAdminController extends Controller
 			case 2:
 				$this->Rockkrawler($items);
 				break;
+			case 3:
+				$this->Bosch($items);
+				break;
 		}
 
 		return new RedirectResponse($this->admin->generateUrl('list'));
@@ -70,7 +73,8 @@ class ParsersAdminController extends Controller
 			if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
  			$old_number = "";
 
-			$content = $this->fileGetContentz("http://cart.bilsteinus.com/product/".$item);
+			$content = $this->fileGetContents("http://cart.bilsteinus.com/product/".$item);
+
 		//Part#
 		  $pos      = strpos($content, 'b>Part Number:</b>');
 		  $old      = strpos($content, '<b>Old Part Number</b>: ');
@@ -230,15 +234,63 @@ class ParsersAdminController extends Controller
 
 	}
 
-	private function Rockkrawler($items){
+	private function Bosch($items)
+	{
+		$objs = array();
+		$obj = array();
+		$value = array();
+		$aobj = array();
 		foreach ($items as $key => $item) {
-			$old_number = "";
-			$content = "";
+			$active = $this->ParsersModel->GetActiveStatus($this->id);
+			if ($active == 0) return new RedirectResponse($this->admin->generateUrl('list'));
+
+			$content = $this->fileGetContents("http://ws12-mtp.boschwebservices.com/RB.EPDS/EPDSProductRetrieveService_REST.svc/Product/GetByPartNumber/BoschAutoParts/" . $item . "?RegisterKey=EN&RegisterType=US&apiKey=B000BEC2-7C47-42C2-AE28-F93C0BE0AEF0&callback=angular.callbacks._1");
+			$content = str_replace('angular.callbacks._1(', "", $content);
+			$content = str_replace(');', "", $content);
+			// Преобразовуем JSON в array
+			$objs = json_decode($content, true);
+			//print_r($objs);
+			//die();
+			// Вытаскиваем элементы массива
+
+			//foreach ($objs as $sKey => $obj) {
+				//print_r($objs);
+				//echo "<p>";
+				//$value = $sKey["Value"];
+				//echo '<dl style="margin-bottom: 1em;">';
+
+				foreach ($objs['Value']['Attributes'] as $innerKey => $sobj) {
+					//print_r($sobj);
+					//echo "<p>";
+					//Очищаем массив от пустых значений
+					/*$obarray = array_diff($sobj, array(''));
+					print_r($obarray);
+					echo "<p>";*/
+
+					$rows = $this->ParsersModel->GetRows();
+					print_r($rows);
+					echo "<p>";
+					//echo "<dt>$key</dt><dd>$value</dd>";
+				}
+				//die();
+				//echo '</dl>';
+			//}
+			//print_r($objs["Value"]["Attributes"]);
+			die();
+
+			$this->InsertDB($array_data[$item]);
+		}
+	}
+
+
+	private function Rockkrawler($items){
+
+		foreach ($items as $key => $item) {
 			$active = $this->ParsersModel->GetActiveStatus($this->id);
 			if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
-
-			$content = $this->fileGetContentz("http://www.rockkrawler.com/ProductDetails.asp?ProductCode=".$item);
-
+			$content = $this->fileGetContents("http://www.rockkrawler.com/ProductDetails.asp?ProductCode=".$item);
+			print_r($content);
+			die();
 			//Part#
 			$pos      = strpos($content, '<span class="product_code">');
 			if($pos)
@@ -364,7 +416,7 @@ class ParsersAdminController extends Controller
 
 		if(!empty($data['number']) && !empty($data['old_number']) ){
 
-			$this->ParsersModel->AddItems($data,$this->id);
+			$this->ParsersModel->AddBoschItems($data,$this->id);
 		}
 	}
 
@@ -385,7 +437,7 @@ class ParsersAdminController extends Controller
 	   curl_setopt($ch, CURLOPT_TIMEOUT , 1);
 	   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 	   curl_setopt($ch, CURLOPT_POSTFIELDS,implode("&" , $data));
-	   curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0");
+	   curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6 (.NET CLR 3.5.30729)");
 	   curl_setopt($ch, CURLOPT_HEADER, 1);
 	   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	   //сохранять полученные COOKIE в файл
@@ -399,25 +451,26 @@ class ParsersAdminController extends Controller
 	   return $result;
 	}
 
-	 private function fileGetContentz($url){
-		sleep(1);
-	    $settings = array(
-	            CURLOPT_RETURNTRANSFER => true,
-	            // CURLOPT_FOLLOWLOCATION => true,
-	            //CURLOPT_MAXREDIRS      => 4,
-	            CURLOPT_HEADER         => false,
-	            CURLOPT_TIMEOUT        => 1,
-	            CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0',
-	            #CURLOPT_COOKIEJAR => '/logs/cookie'.$this->tubeRn.'.tmp'
-	    );
+		 private function fileGetContents($url){
+			 sleep(1);
+			 $settings = array(
+				 CURLOPT_RETURNTRANSFER => true,
+				 // CURLOPT_FOLLOWLOCATION => true,
+				 //CURLOPT_MAXREDIRS      => 4,
+				 CURLOPT_HEADER         => false,
+				 CURLOPT_TIMEOUT        => 1,
+				 CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0',
+				 //CURLOPT_FOLLOWLOCATION        => true,
+				 #CURLOPT_COOKIEJAR => '/logs/cookie'.$this->tubeRn.'.tmp'
+			 );
 
-	    $socket = curl_init($url);
-	    curl_setopt_array($socket, $settings);
-	    $a = curl_exec($socket);
+			 $socket = curl_init($url);
+			 curl_setopt_array($socket, $settings);
+			 $a = curl_exec($socket);
 
-	    return $a;
-	    
-	}
+			 return $a;
+
+		 }
 
 	private function between($start, $end, $content)
 	{

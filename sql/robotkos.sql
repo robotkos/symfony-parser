@@ -116,6 +116,8 @@ CREATE TABLE IF NOT EXISTS `items` (
   `pn` text,
   `old_pn` text,
   `descr` text,
+  `includes` text,
+  `notes` text,
   `img` text
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 

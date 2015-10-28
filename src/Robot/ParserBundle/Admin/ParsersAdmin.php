@@ -21,15 +21,6 @@ class ParsersAdmin extends Admin
                    ->add('name', null, array('label' => 'Name'))
                    ->add('status', 'boolean', array('editable' => true))
                    ->add('dateStart', null, array('label' => 'Date Start'))
-                   ->add('_actionimg', 'actions', array(
-                        'label' => 'Image Action',
-                        'actions' => array(
-                            'Import' => array(
-                                'template' => 'RobotParserBundle:Parsers:list__actionimg_import.html.twig',
-                                'show' => array(),
-                            )
-                        )
-                   ))
                     ->add('_action', 'actions', array(
                       'label' => 'Data Action',
                       'actions' => array(
