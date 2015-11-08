@@ -45,7 +45,7 @@ class Parsers
 		$query->execute();
         return true;
     }
-
+//вытаскивает названия существующих в базе столбцов
     public function GetRows()
     {
         $sql = "SHOW COLUMNS FROM `items` ";
@@ -53,6 +53,14 @@ class Parsers
         $query->execute();
         $rows = $query->fetchAll();
         return $rows;
+    }
+
+    public function AddNewRows($addarr)
+    {
+        $sql = "ALTER TABLE `items` ADD "."$addarr"." TEXT";
+        $query = $this->_em->getConnection()->prepare($sql);
+        $query->execute();
+        return true;
     }
 
     public function AddBoschItems($data,$parser_id){

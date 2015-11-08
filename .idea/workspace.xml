@@ -25,14 +25,19 @@
       <file leaf-file-name="Parsers.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Robot/ParserBundle/Model/Parsers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.23077">
-              <caret line="54" column="20" selection-start-line="54" selection-start-column="20" selection-end-line="54" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="50" column="28" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="28" />
               <folding>
-                <marker date="1446014709938" expanded="true" signature="268:315" placeholder="SELECT `stat..." />
-                <marker date="1446014709938" expanded="true" signature="566:606" placeholder="SELECT * FRO..." />
-                <marker date="1446014709938" expanded="true" signature="863:1021" placeholder="INSERT INTO ..." />
-                <marker date="1446014709938" expanded="true" signature="1771:1929" placeholder="INSERT INTO ..." />
-                <marker date="1446014709938" expanded="true" signature="2751:2801" placeholder="DELETE FROM ..." />
+                <marker date="1446845449453" expanded="true" signature="268:315" placeholder="SELECT `stat..." />
+                <marker date="1446845449453" expanded="true" signature="566:606" placeholder="SELECT * FRO..." />
+                <marker date="1446845449453" expanded="true" signature="863:1021" placeholder="INSERT INTO ..." />
+                <marker date="1446845449453" expanded="true" signature="1814:1837" placeholder="ALTER TABLE ..." />
+                <marker date="1446845449453" expanded="true" signature="1814:1838" placeholder="ALTER TABLE ..." />
+                <marker date="1446845449453" expanded="true" signature="1814:1841" placeholder="ALTER TABLE ..." />
+                <marker date="1446845449453" expanded="true" signature="1814:1856" placeholder="ALTER TABLE ..." />
+                <marker date="1446845449453" expanded="true" signature="1814:1918" placeholder="ALTER TABLE ..." />
+                <marker date="1446845449453" expanded="true" signature="2045:2203" placeholder="INSERT INTO ..." />
+                <marker date="1446845449453" expanded="true" signature="3025:3075" placeholder="DELETE FROM ..." />
               </folding>
             </state>
           </provider>
@@ -41,22 +46,24 @@
       <file leaf-file-name="ParsersAdminController.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Robot/ParserBundle/Controller/ParsersAdminController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.57770634">
-              <caret line="273" column="17" selection-start-line="273" selection-start-column="17" selection-end-line="273" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.30022076">
+              <caret line="289" column="47" selection-start-line="289" selection-start-column="47" selection-end-line="289" selection-end-column="47" />
               <folding>
-                <marker date="1446014844991" expanded="true" signature="2775:2785" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="3283:3293" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="6945:6956" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="7127:7138" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="7402:7413" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="9524:9543" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="9873:9899" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="11446:11459" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="11853:11866" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="12283:12296" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="12485:12498" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="12959:12972" placeholder="..." />
-                <marker date="1446014844991" expanded="true" signature="13114:13127" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="2775:2785" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="3283:3293" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="6945:6956" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="7127:7138" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="7402:7413" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="9524:9543" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="9626:10098" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="10185:10271" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="10899:10922" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="12808:12821" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="13215:13228" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="13645:13658" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="13847:13860" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="14321:14334" placeholder="..." />
+                <marker date="1447019935739" expanded="true" signature="14476:14489" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -164,8 +171,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -464,6 +469,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -524,7 +531,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1874" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20344457" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -895,14 +902,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sql/robotkos.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="121" column="55" selection-start-line="121" selection-start-column="55" selection-end-line="121" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Robot/ParserBundle/Resources/views/Parsers/list__action_import.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -911,38 +910,53 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/sql/robotkos.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="121" column="55" selection-start-line="121" selection-start-column="55" selection-end-line="121" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Robot/ParserBundle/Model/Parsers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.23077">
-          <caret line="54" column="20" selection-start-line="54" selection-start-column="20" selection-end-line="54" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="50" column="28" selection-start-line="50" selection-start-column="16" selection-end-line="50" selection-end-column="28" />
           <folding>
-            <marker date="1446014709938" expanded="true" signature="268:315" placeholder="SELECT `stat..." />
-            <marker date="1446014709938" expanded="true" signature="566:606" placeholder="SELECT * FRO..." />
-            <marker date="1446014709938" expanded="true" signature="863:1021" placeholder="INSERT INTO ..." />
-            <marker date="1446014709938" expanded="true" signature="1771:1929" placeholder="INSERT INTO ..." />
-            <marker date="1446014709938" expanded="true" signature="2751:2801" placeholder="DELETE FROM ..." />
+            <marker date="1446845449453" expanded="true" signature="268:315" placeholder="SELECT `stat..." />
+            <marker date="1446845449453" expanded="true" signature="566:606" placeholder="SELECT * FRO..." />
+            <marker date="1446845449453" expanded="true" signature="863:1021" placeholder="INSERT INTO ..." />
+            <marker date="1446845449453" expanded="true" signature="1814:1837" placeholder="ALTER TABLE ..." />
+            <marker date="1446845449453" expanded="true" signature="1814:1838" placeholder="ALTER TABLE ..." />
+            <marker date="1446845449453" expanded="true" signature="1814:1841" placeholder="ALTER TABLE ..." />
+            <marker date="1446845449453" expanded="true" signature="1814:1856" placeholder="ALTER TABLE ..." />
+            <marker date="1446845449453" expanded="true" signature="1814:1918" placeholder="ALTER TABLE ..." />
+            <marker date="1446845449453" expanded="true" signature="2045:2203" placeholder="INSERT INTO ..." />
+            <marker date="1446845449453" expanded="true" signature="3025:3075" placeholder="DELETE FROM ..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Robot/ParserBundle/Controller/ParsersAdminController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.57770634">
-          <caret line="273" column="17" selection-start-line="273" selection-start-column="17" selection-end-line="273" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.30022076">
+          <caret line="289" column="47" selection-start-line="289" selection-start-column="47" selection-end-line="289" selection-end-column="47" />
           <folding>
-            <marker date="1446014844991" expanded="true" signature="2775:2785" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="3283:3293" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="6945:6956" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="7127:7138" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="7402:7413" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="9524:9543" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="9873:9899" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="11446:11459" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="11853:11866" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="12283:12296" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="12485:12498" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="12959:12972" placeholder="..." />
-            <marker date="1446014844991" expanded="true" signature="13114:13127" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="2775:2785" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="3283:3293" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="6945:6956" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="7127:7138" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="7402:7413" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="9524:9543" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="9626:10098" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="10185:10271" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="10899:10922" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="12808:12821" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="13215:13228" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="13645:13658" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="13847:13860" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="14321:14334" placeholder="..." />
+            <marker date="1447019935739" expanded="true" signature="14476:14489" placeholder="..." />
           </folding>
         </state>
       </provider>

@@ -259,19 +259,66 @@ class ParsersAdminController extends Controller
 				//$value = $sKey["Value"];
 				//echo '<dl style="margin-bottom: 1em;">';
 
+			$rows = $this->ParsersModel->GetRows();
+			//print_r($rows);
+			//echo "<p>";
+			foreach ($rows as $dbkey => $dbobj) {
+				$output[] = array_slice($dbobj, 0	, 1);
+				//$rowses = $rows['Field'];
+			}
+
+			// преобразование многомерного массива в одномерный
+			$result = array();
+			array_walk_recursive($output, function($value, $key) use (&$result){
+				$result[] = array($value); // тут возвращаете как вам хочется
+			});
+			$arrOut = array();
+
+			foreach($result as $subArr){
+				$arrOut = array_merge($arrOut,$subArr);
+			}
+
 				foreach ($objs['Value']['Attributes'] as $innerKey => $sobj) {
 					//print_r($sobj);
 					//echo "<p>";
 					//Очищаем массив от пустых значений
-					/*$obarray = array_diff($sobj, array(''));
-					print_r($obarray);
-					echo "<p>";*/
+					//$obarray = array_diff($sobj, array(''));
+					$sobj = str_replace(' ', "_", $sobj);
+					$sobj = str_replace('-', "_", $sobj);
+					$sobj = str_replace('(', "", $sobj);
+					$sobj = str_replace(')', "", $sobj);
+					$sobj = str_replace('.', "_", $sobj);
+					$output2[] = array_slice($sobj, 1	, 1);
+					// преобразование многомерного массива в одномерный
+					$result2 = array();
+					array_walk_recursive($output2, function($value, $key2) use (&$result2){
+						$result2[] = array($value); // тут возвращаете как вам хочется
+					});
+					$arrOut2 = array();
 
-					$rows = $this->ParsersModel->GetRows();
-					print_r($rows);
-					echo "<p>";
-					//echo "<dt>$key</dt><dd>$value</dd>";
+					foreach($result2 as $subArr2){
+						$arrOut2 = array_merge($arrOut2,$subArr2);
+					}
 				}
+//				print_r($output2);
+//				die();
+
+					$obarray = array_diff($arrOut2, $arrOut);
+
+					//$obarray2 = array_diff($obarray, array(''));
+					foreach ($obarray as $k=>$v){
+						if(empty($v)) unset($obarray[$k]);
+						//$addarr = $obarray['Name'];
+//						print_r($obarray);
+//						die();
+						$this->AddRows($v);
+						//die();
+					}
+
+
+					//echo "<dt>$key</dt><dd>$value</dd>";
+
+
 				//die();
 				//echo '</dl>';
 			//}
@@ -418,6 +465,12 @@ class ParsersAdminController extends Controller
 
 			$this->ParsersModel->AddBoschItems($data,$this->id);
 		}
+	}
+
+	private function AddRows($addarr){
+
+		$this->ParsersModel->AddNewRows($addarr,$this->id);
+
 	}
 
 	private function login($url,$data,$attr){
