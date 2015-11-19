@@ -237,6 +237,7 @@ class ParsersAdminController extends Controller
 	private function Bosch($items)
 	{
 		$objs = array();
+
 		$obj = array();
 		$value = array();
 		$aobj = array();
@@ -258,75 +259,86 @@ class ParsersAdminController extends Controller
 				//echo "<p>";
 				//$value = $sKey["Value"];
 				//echo '<dl style="margin-bottom: 1em;">';
-
-			$rows = $this->ParsersModel->GetRows();
-			//print_r($rows);
-			//echo "<p>";
-			foreach ($rows as $dbkey => $dbobj) {
-				$output[] = array_slice($dbobj, 0	, 1);
-				//$rowses = $rows['Field'];
-			}
-
-			// преобразование многомерного массива в одномерный
-			$result = array();
-			array_walk_recursive($output, function($value, $key) use (&$result){
-				$result[] = array($value); // тут возвращаете как вам хочется
-			});
-			$arrOut = array();
-
-			foreach($result as $subArr){
-				$arrOut = array_merge($arrOut,$subArr);
-			}
+		//получаем столбци из бызи для сравнения
 
 				foreach ($objs['Value']['Attributes'] as $innerKey => $sobj) {
-					//print_r($sobj);
+
+					$rows = $this->ParsersModel->GetRows();
+					//print_r($rows);
 					//echo "<p>";
+					foreach ($rows as $dbkey => $dbobj) {
+						$output[] = array_slice($dbobj, 0	, 1);
+						//$rowses = $rows['Field'];
+					}
+					//print_r($output);
+					//die();
+					// преобразование многомерного массива в одномерный
+					$result = array();
+					array_walk_recursive($output, function($value, $key) use (&$result){
+						$result[] = array($value); // тут возвращаете как вам хочется
+					});
+
+					$arrOut = array();
+					foreach($result as $subArr){
+						$arrOut = array_merge($arrOut,$subArr);
+					}
+					//$output2 = array();
 					//Очищаем массив от пустых значений
-					//$obarray = array_diff($sobj, array(''));
 					$sobj = str_replace(' ', "_", $sobj);
 					$sobj = str_replace('-', "_", $sobj);
 					$sobj = str_replace('(', "", $sobj);
 					$sobj = str_replace(')', "", $sobj);
 					$sobj = str_replace('.', "_", $sobj);
+					$sobj = str_replace('\'', "_", $sobj);
 					$output2[] = array_slice($sobj, 1	, 1);
-					// преобразование многомерного массива в одномерный
+
+					// Параметр: преобразование многомерного массива в одномерный
 					$result2 = array();
 					array_walk_recursive($output2, function($value, $key2) use (&$result2){
 						$result2[] = array($value); // тут возвращаете как вам хочется
 					});
 					$arrOut2 = array();
-
 					foreach($result2 as $subArr2){
 						$arrOut2 = array_merge($arrOut2,$subArr2);
 					}
-				}
-//				print_r($output2);
-//				die();
 
-					$obarray = array_diff($arrOut2, $arrOut);
-
-					//$obarray2 = array_diff($obarray, array(''));
-					foreach ($obarray as $k=>$v){
-						if(empty($v)) unset($obarray[$k]);
-						//$addarr = $obarray['Name'];
-//						print_r($obarray);
-//						die();
-						$this->AddRows($v);
-						//die();
+					// Значение: преобразование многомерного массива в одномерный
+					$outputvalue[] = array_slice($sobj, 3	, 1);
+					$result3 = array();
+					array_walk_recursive($outputvalue, function($value, $key2) use (&$result3){
+						$result3[] = array($value); // тут возвращаете как вам хочется
+					});
+					$arrOut3 = array();
+					foreach($result3 as $subArr3){
+						$arrOut3 = array_merge($arrOut3,$subArr3);
 					}
+				}
 
+			$obarray = array_diff($arrOut2, $arrOut);
 
-					//echo "<dt>$key</dt><dd>$value</dd>";
+			//$obarray2 = array_diff($obarray, array(''));
+			foreach ($obarray as $k=>$v){
+				if(empty($v)) unset($obarray[$k]);
+				$this->AddRows($v);
+			}
+			//Параметр кидаем в ключ, значение в значение
+			//$final = array_combine($arrOut2, $arrOut3);
 
+			$arrOutt = implode("`,`", $arrOut2);
+			$arrOutd = implode("\",\"", $arrOut3);
+			//$arrOut3 = str_replace(', ', '","', $arrOut3);
+			//print_r($arrOutd);
+			//die();
+			$this->InsertBoschDB($item,$arrOutt,$arrOutd);
 
-				//die();
-				//echo '</dl>';
-			//}
-			//print_r($objs["Value"]["Attributes"]);
-			die();
+			/*
+			foreach ($final as $finalkey => $finals) {
+				$this->InsertBoschDB($item,$finalkey,$finals);
+			$arrOutt
+			}*/
 
-			$this->InsertDB($array_data[$item]);
 		}
+		//die();
 	}
 
 
@@ -336,8 +348,7 @@ class ParsersAdminController extends Controller
 			$active = $this->ParsersModel->GetActiveStatus($this->id);
 			if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
 			$content = $this->fileGetContents("http://www.rockkrawler.com/ProductDetails.asp?ProductCode=".$item);
-			print_r($content);
-			die();
+
 			//Part#
 			$pos      = strpos($content, '<span class="product_code">');
 			if($pos)
@@ -432,8 +443,7 @@ class ParsersAdminController extends Controller
 				}
 				$array_data[$item]['old_number'] = "Null"  ;
 				$array_data[$item]['descrip'] = "Null"  ;
-				print_r($array_data);
-				die();
+
 				$this->InsertDB($array_data[$item]);
 			}
 			else
@@ -463,8 +473,18 @@ class ParsersAdminController extends Controller
 
 		if(!empty($data['number']) && !empty($data['old_number']) ){
 
-			$this->ParsersModel->AddBoschItems($data,$this->id);
+			$this->ParsersModel->AddItems($data,$this->id);
 		}
+	}
+
+	private function InsertBoschDB($item,$data1,$data2){
+
+		//if(!empty($data['number']) ){
+			$data2 = '"'.$data2.'"';
+			$this->ParsersModel->AddBoschItems($item,$data1,$data2,$this->id);
+
+
+		//}
 	}
 
 	private function AddRows($addarr){
@@ -505,13 +525,13 @@ class ParsersAdminController extends Controller
 	}
 
 		 private function fileGetContents($url){
-			 sleep(1);
+			 //sleep(1);
 			 $settings = array(
 				 CURLOPT_RETURNTRANSFER => true,
 				 // CURLOPT_FOLLOWLOCATION => true,
 				 //CURLOPT_MAXREDIRS      => 4,
 				 CURLOPT_HEADER         => false,
-				 CURLOPT_TIMEOUT        => 1,
+				 CURLOPT_TIMEOUT        => 2,
 				 CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0',
 				 //CURLOPT_FOLLOWLOCATION        => true,
 				 #CURLOPT_COOKIEJAR => '/logs/cookie'.$this->tubeRn.'.tmp'

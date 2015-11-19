@@ -63,17 +63,21 @@ class Parsers
         return true;
     }
 
-    public function AddBoschItems($data,$parser_id){
+    public function AddBoschItems($item,$data1,$data2,$parser_id){
 
-        $sql = "INSERT INTO `items` (`parser_id`,`pn`, `old_pn`, `descr`,`includes`,`notes`,`img`) VALUES (:parser_id, :number, :old_number, :descrip, :includes, :notes,:img)";
+        /*$sql = "INSERT INTO `items` (`parser_id`,"."`$data1`".") VALUES (:parser_id, "."`$data2`".")";
+        $query = $this->_em->getConnection()->prepare($sql);
+        $query->bindValue('parser_id', $parser_id, \PDO::PARAM_INT);
+        //$query->bindValue('parser_id', $parser_id);
+        $query->bindValue($data1, $data2);
+        $query->execute();
+        return true;*/
+
+        $sql = "INSERT INTO items (parser_id,`pn`, `"."$data1"."`) VALUES (:parser_id, :pn, $data2)";
         $query = $this->_em->getConnection()->prepare($sql);
         $query->bindValue('parser_id', $parser_id);
-        $query->bindValue('number', $data['number']);
-        $query->bindValue('old_number', $data['old_number']);
-        $query->bindValue('descrip',$data['descrip']);
-        $query->bindValue('includes',$data['includes']);
-        $query->bindValue('notes',$data['notes']);
-        $query->bindValue('img', '');
+        //$query->bindValue('data2', $data2);
+        $query->bindValue('pn', $item);
         $query->execute();
         return true;
     }
