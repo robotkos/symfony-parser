@@ -260,16 +260,19 @@ class ParsersAdminController extends Controller
 				//$value = $sKey["Value"];
 				//echo '<dl style="margin-bottom: 1em;">';
 		//получаем столбци из бызи для сравнения
-
+				$outputvalue = array();
+				$output2 = array();
 				foreach ($objs['Value']['Attributes'] as $innerKey => $sobj) {
 
 					$rows = $this->ParsersModel->GetRows();
 					//print_r($rows);
 					//echo "<p>";
+					$output = array();
 					foreach ($rows as $dbkey => $dbobj) {
 						$output[] = array_slice($dbobj, 0	, 1);
 						//$rowses = $rows['Field'];
 					}
+
 					//print_r($output);
 					//die();
 					// преобразование многомерного массива в одномерный
@@ -277,7 +280,7 @@ class ParsersAdminController extends Controller
 					array_walk_recursive($output, function($value, $key) use (&$result){
 						$result[] = array($value); // тут возвращаете как вам хочется
 					});
-
+					
 					$arrOut = array();
 					foreach($result as $subArr){
 						$arrOut = array_merge($arrOut,$subArr);
@@ -290,6 +293,7 @@ class ParsersAdminController extends Controller
 					$sobj = str_replace(')', "", $sobj);
 					$sobj = str_replace('.', "_", $sobj);
 					$sobj = str_replace('\'', "_", $sobj);
+					$sobj = str_replace('"', "du", $sobj);
 					$output2[] = array_slice($sobj, 1	, 1);
 
 					// Параметр: преобразование многомерного массива в одномерный
@@ -309,10 +313,12 @@ class ParsersAdminController extends Controller
 						$result3[] = array($value); // тут возвращаете как вам хочется
 					});
 					$arrOut3 = array();
+
 					foreach($result3 as $subArr3){
 						$arrOut3 = array_merge($arrOut3,$subArr3);
 					}
 				}
+
 
 			$obarray = array_diff($arrOut2, $arrOut);
 
@@ -338,6 +344,7 @@ class ParsersAdminController extends Controller
 			}*/
 
 		}
+
 		//die();
 	}
 
