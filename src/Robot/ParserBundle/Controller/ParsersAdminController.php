@@ -13,26 +13,9 @@ class ParsersAdminController extends Controller
 	private $ParsersModel;
 	private $id;
 
-	public function ImportimgAction(Request $request) {
+	public function ExporttAction(Request $request) {
 		$this->request = $request;
-		$this->id = $this->request->get($this->admin->getIdParameter());
-		$this->ParsersModel = $this->get('parsers.service');
-		$this->ParsersModel->UpdateParser($this->id);
-		$parts = array();
-		$parts = $this->ParsersModel->GetParts($this->id);
-		if(!empty($parts['parts'])){
-			$parts = $parts['parts'];
-		}
-		$items = explode(",", $parts);
-
-		$array_data = $this->ParsersModel->DeleteItems($this->id);
-
-		$array_data = array();
-		switch ($this->id) {
-			case 1:
-				$this->Bilsteinus_imgs($items);
-				break;
-		}
+		$rows = $this->ParsersModel->ExportDatabase();
 
 		return new RedirectResponse($this->admin->generateUrl('list'));
 	}
@@ -202,37 +185,7 @@ class ParsersAdminController extends Controller
 		}
 		return $array_data;
 	}
-// Bilstein Image Parser
-	private function Bilsteinus_imgs($items){
 
-		$active = $this->ParsersModel->GetActiveStatus($this->id);
-		if($active == 0 ) return new RedirectResponse($this->admin->generateUrl('list'));
-
-		$ftp_server="robotk00.ftp.ukraine.com.ua";
-		$ftp_user_name="robotk00_test";
-		$ftp_user_pass="ilmpvma1";
-
-		$array_data = array();
-		foreach ($items as $key => $item) {
-
-			$file = "http://cart.bilsteinus.com/images/products/".$item."_1.jpg";
-
-			$remote_file  = $item."_1.jpg";
-			// set up basic connection
-			$conn_id = ftp_connect($ftp_server);
-
-			// login with username and password
-			$login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
-
-			// upload a file
-			ftp_put($conn_id, $remote_file, $file, FTP_ASCII);
-			// close the connection
-
-		}
-
-		ftp_close($conn_id);
-
-	}
 
 	private function Bosch($items)
 	{
@@ -241,6 +194,7 @@ class ParsersAdminController extends Controller
 		$obj = array();
 		$value = array();
 		$aobj = array();
+		//ini_set('max_execution_time', 60);
 		foreach ($items as $key => $item) {
 			$active = $this->ParsersModel->GetActiveStatus($this->id);
 			if ($active == 0) return new RedirectResponse($this->admin->generateUrl('list'));
@@ -260,6 +214,10 @@ class ParsersAdminController extends Controller
 				//$value = $sKey["Value"];
 				//echo '<dl style="margin-bottom: 1em;">';
 		//получаем столбци из бызи для сравнения
+			if ($objs['Value']['Attributes'])
+			{
+
+
 				$outputvalue = array();
 				$output2 = array();
 				foreach ($objs['Value']['Attributes'] as $innerKey => $sobj) {
@@ -287,13 +245,7 @@ class ParsersAdminController extends Controller
 					}
 					//$output2 = array();
 					//Очищаем массив от пустых значений
-					$sobj = str_replace(' ', "_", $sobj);
-					$sobj = str_replace('-', "_", $sobj);
-					$sobj = str_replace('(', "", $sobj);
-					$sobj = str_replace(')', "", $sobj);
-					$sobj = str_replace('.', "_", $sobj);
-					$sobj = str_replace('\'', "_", $sobj);
-					$sobj = str_replace('"', "du", $sobj);
+
 					$output2[] = array_slice($sobj, 1	, 1);
 
 					// Параметр: преобразование многомерного массива в одномерный
@@ -305,6 +257,15 @@ class ParsersAdminController extends Controller
 					foreach($result2 as $subArr2){
 						$arrOut2 = array_merge($arrOut2,$subArr2);
 					}
+
+					$arrOut2 = str_replace(' ', "_", $arrOut2);
+					$arrOut2 = str_replace('-', "_", $arrOut2);
+					$arrOut2 = str_replace('(', "", $arrOut2);
+					$arrOut2 = str_replace(')', "", $arrOut2);
+					$arrOut2 = str_replace('.', "_", $arrOut2);
+					$arrOut2 = str_replace('\'', "_", $arrOut2);
+					$arrOut2 = str_replace('"', "du", $arrOut2);
+					$arrOut2 = str_replace('/', "_", $arrOut2);
 
 					// Значение: преобразование многомерного массива в одномерный
 					$outputvalue[] = array_slice($sobj, 3	, 1);
@@ -320,28 +281,35 @@ class ParsersAdminController extends Controller
 				}
 
 
-			$obarray = array_diff($arrOut2, $arrOut);
+				$obarray = array_diff($arrOut2, $arrOut);
 
-			//$obarray2 = array_diff($obarray, array(''));
-			foreach ($obarray as $k=>$v){
-				if(empty($v)) unset($obarray[$k]);
-				$this->AddRows($v);
+				//$obarray2 = array_diff($obarray, array(''));
+				foreach ($obarray as $k=>$v){
+					if(empty($v)) unset($obarray[$k]);
+					$this->AddRows($v);
+				}
+				//Параметр кидаем в ключ, значение в значение
+				//$final = array_combine($arrOut2, $arrOut3);
+
+				$arrOutt = implode("`,`", $arrOut2);
+				$arrOutd = implode("\",\"", $arrOut3);
+				//$arrOut3 = str_replace(', ', '","', $arrOut3);
+				//print_r($arrOutd);
+				//die();
+				//print_r($arrOutd);
+
+				$this->InsertBoschDB($item,$arrOutt,$arrOutd);
+
+				/*
+				foreach ($final as $finalkey => $finals) {
+					$this->InsertBoschDB($item,$finalkey,$finals);
+				$arrOutt
+				}*/
 			}
-			//Параметр кидаем в ключ, значение в значение
-			//$final = array_combine($arrOut2, $arrOut3);
-
-			$arrOutt = implode("`,`", $arrOut2);
-			$arrOutd = implode("\",\"", $arrOut3);
-			//$arrOut3 = str_replace(', ', '","', $arrOut3);
-			//print_r($arrOutd);
-			//die();
-			$this->InsertBoschDB($item,$arrOutt,$arrOutd);
-
-			/*
-			foreach ($final as $finalkey => $finals) {
-				$this->InsertBoschDB($item,$finalkey,$finals);
-			$arrOutt
-			}*/
+			else
+			{
+				$this->InsertBoschDB($item,"descr","no_item");
+			}
 
 		}
 
@@ -538,12 +506,12 @@ class ParsersAdminController extends Controller
 				 // CURLOPT_FOLLOWLOCATION => true,
 				 //CURLOPT_MAXREDIRS      => 4,
 				 CURLOPT_HEADER         => false,
-				 CURLOPT_TIMEOUT        => 2,
+				 CURLOPT_TIMEOUT        => 1.5,
 				 CURLOPT_USERAGENT      => 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0',
 				 //CURLOPT_FOLLOWLOCATION        => true,
 				 #CURLOPT_COOKIEJAR => '/logs/cookie'.$this->tubeRn.'.tmp'
 			 );
-
+			 ini_set('max_execution_time', 60);
 			 $socket = curl_init($url);
 			 curl_setopt_array($socket, $settings);
 			 $a = curl_exec($socket);

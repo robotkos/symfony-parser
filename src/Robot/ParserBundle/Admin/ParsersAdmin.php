@@ -42,7 +42,7 @@ class ParsersAdmin extends Admin
 
   protected function configureRoutes(RouteCollection $collection)
   {
-      $collection->add('importimg', $this->getRouterIdParameter().'/importimg');
+      $collection->add('exportt', $this->getRouterIdParameter().'/export');
       $collection->add('import', $this->getRouterIdParameter().'/import');
   }
 
